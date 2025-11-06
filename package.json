@@ -1,0 +1,41 @@
+{
+  "name": "web_kakariko",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Aplicación web modular con Vite, Vanilla JS y DaisyUI 5",
+  "type": "module",
+  "main": "electron/main.js",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.1.17",
+    "autoprefixer": "^10.4.21",
+    "daisyui": "^5.4.5",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^4.1.17",
+    "vite": "^7.1.7"
+  },
+  "build": {
+    "appId": "com.kakariko.app",
+    "productName": "Kakariko App",
+    "directories": {
+      "output": "dist-electron"
+    },
+    "files": [
+      "dist/**/*",
+      "electron/**/*"
+    ],
+    "mac": {
+      "target": "dmg"
+    },
+    "win": {
+      "target": "nsis"
+    },
+    "linux": {
+      "target": "AppImage"
+    }
+  }
+}
