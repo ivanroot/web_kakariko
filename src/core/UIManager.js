@@ -13,8 +13,11 @@ export class UIManager {
   render() {
     const app = document.querySelector('#app');
 
+    // Aplicar tema al elemento html
+    document.documentElement.setAttribute('data-theme', this.theme);
+
     app.innerHTML = `
-      <div class="drawer lg:drawer-open" data-theme="${this.theme}">
+      <div class="drawer lg:drawer-open">
         <input id="drawer-toggle" type="checkbox" class="drawer-toggle" />
         <div class="drawer-content flex flex-col">
           <!-- Navbar -->
@@ -167,9 +170,7 @@ export class UIManager {
     this.theme = themes[(currentIndex + 1) % themes.length];
     localStorage.setItem('theme', this.theme);
 
-    const drawer = document.querySelector('.drawer');
-    if (drawer) {
-      drawer.setAttribute('data-theme', this.theme);
-    }
+    // Aplicar tema al elemento html
+    document.documentElement.setAttribute('data-theme', this.theme);
   }
 }
