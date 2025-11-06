@@ -18,16 +18,16 @@ class App {
   async init() {
     console.log('🏔️ Initializing Kakariko App...');
 
-    // Initialize Module Manager
-    const container = document.querySelector('#module-container');
-    moduleManager.init(container);
-
-    // Register modules
+    // Register modules first
     this.registerModules();
 
-    // Initialize UI Manager
+    // Initialize UI Manager (creates the HTML structure)
     this.uiManager = new UIManager(moduleManager);
     this.uiManager.render();
+
+    // Now initialize Module Manager with the container that exists
+    const container = document.querySelector('#module-container');
+    moduleManager.init(container);
 
     console.log('✅ App initialized successfully');
   }
