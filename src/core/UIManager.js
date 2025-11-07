@@ -33,11 +33,17 @@ export class UIManager {
               <h1 class="text-xl font-bold ml-4">🏔️ Kakariko App</h1>
             </div>
             <div class="flex-none">
-              <button id="theme-toggle" class="btn btn-ghost btn-circle">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="w-6 h-6 stroke-current">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
-                </svg>
-              </button>
+              <div class="dropdown dropdown-end">
+                <div tabindex="0" role="button" class="btn btn-ghost">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="w-6 h-6 stroke-current">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
+                  </svg>
+                  <span class="hidden md:inline">Theme</span> 
+                  <svg width="12px" height="12px" class="hidden h-2 w-2 fill-current opacity-60 sm:inline-block" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2048 2048"><path d="M1799 349l242 241-1017 1017L7 590l242-241 775 775 775-775z"></path></svg>
+                </div>
+                <ul tabindex="0" id="theme-selector" class="dropdown-content menu z-[1] p-2 shadow-2xl bg-base-300 rounded-box w-52 h-96 overflow-y-auto">
+                </ul>
+              </div>
             </div>
           </div>
 
@@ -126,11 +132,8 @@ export class UIManager {
    * Adjunta event listeners
    */
   attachEventListeners() {
-    // Theme toggle
-    const themeToggle = document.querySelector('#theme-toggle');
-    if (themeToggle) {
-      themeToggle.addEventListener('click', () => this.toggleTheme());
-    }
+    // Theme selector
+    this.renderThemeSelector();
 
     // Module click listeners
     this.attachModuleListeners();
@@ -139,6 +142,43 @@ export class UIManager {
     window.addEventListener('module-loaded', () => {
       this.updateModulesList();
     });
+  }
+
+  renderThemeSelector() {
+    const themes = [
+      "light", "dark", "cupcake", "bumblebee", "emerald", "corporate",
+      "synthwave", "retro", "cyberpunk", "valentine", "halloween", "garden",
+      "forest", "aqua", "lofi", "pastel", "fantasy", "wireframe", "black",
+      "luxury", "dracula", "cmyk", "autumn", "business", "acid", "lemonade",
+      "night", "coffee", "winter", "dim", "nord", "sunset"
+    ];
+
+    const themeSelector = document.querySelector('#theme-selector');
+    if (!themeSelector) return;
+
+    themeSelector.innerHTML = themes.map(theme => `
+      <li>
+        <a data-theme-id="${theme}" class="theme-item ${this.theme === theme ? 'active' : ''}">
+          ${theme}
+        </a>
+      </li>
+    `).join('');
+
+    const themeItems = document.querySelectorAll('.theme-item');
+    themeItems.forEach(item => {
+      item.addEventListener('click', (e) => {
+        e.preventDefault();
+        const newTheme = item.getAttribute('data-theme-id');
+        this.setTheme(newTheme);
+      });
+    });
+  }
+
+  setTheme(newTheme) {
+    this.theme = newTheme;
+    localStorage.setItem('theme', this.theme);
+    document.documentElement.setAttribute('data-theme', this.theme);
+    this.renderThemeSelector(); // Re-render to update active state
   }
 
   /**
@@ -161,16 +201,5 @@ export class UIManager {
     });
   }
 
-  /**
-   * Cambia el tema
-   */
-  toggleTheme() {
-    const themes = ['light', 'dark', 'cupcake', 'cyberpunk'];
-    const currentIndex = themes.indexOf(this.theme);
-    this.theme = themes[(currentIndex + 1) % themes.length];
-    localStorage.setItem('theme', this.theme);
 
-    // Aplicar tema al elemento html
-    document.documentElement.setAttribute('data-theme', this.theme);
-  }
 }
