@@ -4,7 +4,7 @@
  * y puede exponer APIs de Node.js al contexto del renderer de forma segura
  */
 
-const { contextBridge } = require('electron');
+import { contextBridge } from 'electron';
 
 contextBridge.exposeInMainWorld('electron', {
   platform: process.platform,

@@ -20,6 +20,26 @@ export default {
 }
 ```
 
+## ⚙️ Generador Automático
+
+Para acelerar la creación, usa el generador:
+
+```bash
+npm run generate:module -- mi-modulo "Descripción opcional"
+```
+
+Esto creará `modules/mi-modulo/` con la estructura base:
+
+- `index.js` (punto de entrada)
+- `controllers/MainController.js`
+- `services/BaseService.js`
+- `models/State.js`
+- `routes/index.js`
+- `README.md` del módulo
+- `template.package.json` para dependencias opcionales
+
+Si tu `src/main.js` no tiene auto‑registro, el generador añadirá el registro manual.
+
 ## 📝 Paso a Paso
 
 ### 1. Crear la Carpeta del Módulo
@@ -104,7 +124,9 @@ export default {
 
 ### 3. Registrar el Módulo
 
-Edita `src/main.js` y añade:
+Si tu proyecto soporta auto‑registro, no necesitas editar `src/main.js`.
+
+Si no, edita `src/main.js` y añade:
 
 ```javascript
 // Importar
@@ -301,3 +323,9 @@ console.log('Módulo activo:', moduleManager.getActiveModule());
 // Ver todos los módulos
 console.log('Todos los módulos:', moduleManager.getModules());
 ```
+## 🔧 Auto‑registro de módulos
+
+`src/main.js` incluye auto‑registro usando `import.meta.glob('../modules/**/index.js', { eager: true })`.
+- Carga automáticamente todos los módulos dentro de `modules/*`.
+- El ID del módulo es el nombre de la carpeta.
+- Mantiene fallback a registro manual si no se encuentra ningún módulo.

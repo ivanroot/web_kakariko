@@ -33,10 +33,24 @@ class App {
   }
 
   registerModules() {
-    // Register all available modules
-    moduleManager.register('dashboard', dashboardModule);
-    moduleManager.register('calculator', calculatorModule);
-    moduleManager.register('notes', notesModule);
+    // Auto‑registro: importa cualquier index.js dentro de /modules/*
+    const autoModules = import.meta.glob('../modules/**/index.js', { eager: true });
+    const entries = Object.entries(autoModules);
+
+    if (entries.length > 0) {
+      for (const [p, mod] of entries) {
+        const segments = p.split('/');
+        const idx = segments.lastIndexOf('modules');
+        const id = idx !== -1 && segments[idx + 1] ? segments[idx + 1] : `mod-${Math.random().toString(36).slice(2, 8)}`;
+        const config = mod.default || mod;
+        moduleManager.register(id, config);
+      }
+    } else {
+      // Fallback al registro manual existente
+      moduleManager.register('dashboard', dashboardModule);
+      moduleManager.register('calculator', calculatorModule);
+      moduleManager.register('notes', notesModule);
+    }
 
     console.log(`📦 Registered ${moduleManager.getModules().length} modules`);
   }

@@ -3,8 +3,12 @@
  * Este archivo se ejecutará cuando la aplicación se compile como app de escritorio
  */
 
-const { app, BrowserWindow } = require('electron');
-const path = require('path');
+import { app, BrowserWindow } from 'electron';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 let mainWindow;
 
@@ -17,12 +21,14 @@ function createWindow() {
       contextIsolation: true,
       preload: path.join(__dirname, 'preload.js')
     },
-    icon: path.join(__dirname, '../public/icon.png')
+    // icon opcional; si no existe, Electron lo ignora
+    // icon: path.join(__dirname, '../public/icon.png')
   });
 
   // En desarrollo, cargar desde el servidor de Vite
   if (process.env.NODE_ENV === 'development') {
-    mainWindow.loadURL('http://localhost:5173');
+    const devPort = process.env.VITE_DEV_SERVER_PORT || '5173';
+    mainWindow.loadURL(`http://localhost:${devPort}`);
     mainWindow.webContents.openDevTools();
   } else {
     // En producción, cargar el HTML compilado

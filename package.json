@@ -8,14 +8,25 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "dev:electron": "node scripts/dev-electron.cjs",
+    "setup:electron": "bash scripts/setup-electron-deps.sh",
+    "generate:module": "node scripts/generate-module.mjs",
+    "start:electron": "vite build && cross-env NODE_ENV=production electron .",
+    "build:electron": "vite build && electron-builder"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.1.17",
     "daisyui": "^5.4.5",
     "postcss": "^8.5.6",
     "tailwindcss": "^4.0.0",
-    "vite": "^7.1.7"
+    "vite": "^7.1.7",
+    "concurrently": "^8.2.2",
+    "cross-env": "^7.0.3",
+    "electron": "^33.0.2",
+    "electron-builder": "^24.13.3",
+    "detect-port": "^1.5.1",
+    "wait-on": "^7.2.0"
   },
   "build": {
     "appId": "com.kakariko.app",
